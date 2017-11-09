@@ -24,7 +24,6 @@ Pics.addField(dummyFlag);
 Comments.addField(dummyFlag);
 
 var createPic = function (imageUrl, createdAt, body, username) {
-  
   const user = Users.findOne({username: username});
 
   const pic = {
@@ -120,13 +119,18 @@ const createDummyComments = function () {
 
 Meteor.startup(function () {
   // insert dummy content only if there aren't any users, pics, or comments in the db
-  if (!Users.find().count()) {
+  if ( Users.find().count() < 3 ) {
     createDummyUsers();
   }
+
+  while (  Users.find().count() < 3 ) {
+    Meteor._sleepForMs(500);
+  };
+
   if (!Pics.find().count()) {
     createDummyPics();
   }
   if (!Comments.find().count()) {
     createDummyComments();
   }
-});
+}); 
